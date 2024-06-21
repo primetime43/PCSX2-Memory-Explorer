@@ -15,7 +15,7 @@ namespace Ratchet___Clank
 
         public enum RA2_Address : int
         {
-            Bolts = 0x00
+            Bolts = 0x001A7A00
         }
     }
 }

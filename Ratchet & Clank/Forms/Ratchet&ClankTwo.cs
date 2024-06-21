@@ -14,7 +14,7 @@ namespace Ratchet___Clank
         {
             if (SharedResources.ProcessHandle != IntPtr.Zero && SharedResources.BaseAddressManager.EEmemBaseAddress != IntPtr.Zero)
             {
-                IntPtr baseAddress = SharedResources.BaseAddressManager.EEmemBaseAddress + (int)MemoryAddresses.Address.Bolts;
+                IntPtr baseAddress = SharedResources.BaseAddressManager.EEmemBaseAddress + (int)MemoryAddresses.RA2_Address.Bolts;
 
                 if (int.TryParse(textBoxBolts.Text, out int value))
                 {
