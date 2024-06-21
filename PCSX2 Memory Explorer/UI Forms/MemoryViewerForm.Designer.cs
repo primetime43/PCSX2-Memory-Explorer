@@ -24,11 +24,11 @@
             // richTextBoxMemory
             // 
             this.richTextBoxMemory.Dock = System.Windows.Forms.DockStyle.Top;
-            this.richTextBoxMemory.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxMemory.Location = new Point(0, 0);
             this.richTextBoxMemory.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBoxMemory.Name = "richTextBoxMemory";
             this.richTextBoxMemory.ReadOnly = true;
-            this.richTextBoxMemory.Size = new System.Drawing.Size(600, 330);
+            this.richTextBoxMemory.Size = new Size(600, 330);
             this.richTextBoxMemory.TabIndex = 0;
             this.richTextBoxMemory.Text = "";
             // 
@@ -36,10 +36,10 @@
             // 
             this.checkBoxDisplayRawAddresses.AutoSize = true;
             this.checkBoxDisplayRawAddresses.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.checkBoxDisplayRawAddresses.Location = new System.Drawing.Point(0, 349);
+            this.checkBoxDisplayRawAddresses.Location = new Point(0, 349);
             this.checkBoxDisplayRawAddresses.Name = "checkBoxDisplayRawAddresses";
             this.checkBoxDisplayRawAddresses.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.checkBoxDisplayRawAddresses.Size = new System.Drawing.Size(600, 17);
+            this.checkBoxDisplayRawAddresses.Size = new Size(600, 17);
             this.checkBoxDisplayRawAddresses.TabIndex = 1;
             this.checkBoxDisplayRawAddresses.Text = "Display Raw Addresses";
             this.checkBoxDisplayRawAddresses.UseVisualStyleBackColor = true;
@@ -47,9 +47,9 @@
             // 
             // MemoryViewerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(600, 366);
+            this.ClientSize = new Size(600, 366);
             this.Controls.Add(this.richTextBoxMemory);
             this.Controls.Add(this.checkBoxDisplayRawAddresses);
             this.Margin = new System.Windows.Forms.Padding(2);
