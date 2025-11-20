@@ -22,6 +22,8 @@ namespace Ratchet___Clank
                     return new GameMemoryEditorForm(new RatchetClank2Config());
                 case "Ratchet & Clank 3: Up Your Arsenal (NTSC)":
                     return new GameMemoryEditorForm(new RatchetClank3Config());
+                case "Ratchet: Deadlocked (NTSC)":
+                    return new GameMemoryEditorForm(new RatchetDeadlockedConfig());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }

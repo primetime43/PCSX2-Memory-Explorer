@@ -17,7 +17,8 @@ namespace Common
         {
             "Ratchet & Clank 1 (NTSC)",
             "Ratchet & Clank: Going Commando (NTSC)",
-            "Ratchet & Clank 3: Up Your Arsenal (NTSC)"
+            "Ratchet & Clank 3: Up Your Arsenal (NTSC)",
+            "Ratchet: Deadlocked (NTSC)"
         };
     }
 }
