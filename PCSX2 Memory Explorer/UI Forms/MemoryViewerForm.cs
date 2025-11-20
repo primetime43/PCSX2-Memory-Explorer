@@ -46,6 +46,10 @@ namespace PCSX2_Memory_Explorer
         private IntPtr _currentAddress;
         private const int PAGE_SIZE = 512; // Show 512 bytes per page
 
+        // Selection tracking
+        private long _selectedAddress = -1;
+        private byte[] _selectedBytes = null;
+
         public MemoryViewerForm()
         {
             InitializeComponent();
@@ -302,6 +306,245 @@ namespace PCSX2_Memory_Explorer
 
             MessageBox.Show("Invalid address format! Use hex format (e.g., 0x1A7A00)", "Invalid Address", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
+        }
+
+        private void richTextBoxMemory_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Get selected text and parse it to extract hex bytes
+            string selectedText = richTextBoxMemory.SelectedText;
+            if (string.IsNullOrWhiteSpace(selectedText))
+            {
+                return;
+            }
+
+            // Get the full text and selection position to find the address
+            int selectionStart = richTextBoxMemory.SelectionStart;
+            string fullText = richTextBoxMemory.Text;
+
+            // Find the line that contains the selection start
+            int lineStart = fullText.LastIndexOf('\n', Math.Max(0, selectionStart - 1)) + 1;
+            int lineEnd = fullText.IndexOf('\n', selectionStart);
+            if (lineEnd < 0) lineEnd = fullText.Length;
+
+            string currentLine = fullText.Substring(lineStart, lineEnd - lineStart);
+
+            // Parse address from the current line (first 8 or 16 hex characters)
+            long baseAddress = _currentAddress.ToInt64();
+            string[] lineParts = currentLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (lineParts.Length > 0)
+            {
+                string addressPart = lineParts[0];
+                if ((addressPart.Length == 8 || addressPart.Length == 16) &&
+                    long.TryParse(addressPart, System.Globalization.NumberStyles.HexNumber, null, out long lineAddr))
+                {
+                    baseAddress = lineAddr;
+                }
+            }
+
+            // Now find which byte position in the line was selected
+            // Count how many hex bytes appear before the selection in the current line
+            int bytesBeforeSelection = 0;
+            string lineBeforeSelection = currentLine.Substring(0, Math.Min(currentLine.Length, selectionStart - lineStart));
+
+            // Count space-separated 2-char hex values before selection
+            string[] beforeWords = lineBeforeSelection.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in beforeWords)
+            {
+                if (word.Length == 2 && byte.TryParse(word, System.Globalization.NumberStyles.HexNumber, null, out _))
+                {
+                    bytesBeforeSelection++;
+                }
+            }
+
+            // Extract hex bytes from selection
+            var bytes = new System.Collections.Generic.List<byte>();
+            string[] words = selectedText.Split(new[] { ' ', '\t', '\r', '\n', '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string word in words)
+            {
+                // Try to parse as hex byte (exactly 2 hex digits)
+                if (word.Length == 2 && byte.TryParse(word, System.Globalization.NumberStyles.HexNumber, null, out byte b))
+                {
+                    bytes.Add(b);
+                }
+            }
+
+            // Update the data inspector if we got any bytes
+            if (bytes.Count > 0)
+            {
+                _selectedAddress = baseAddress + bytesBeforeSelection;
+                _selectedBytes = bytes.ToArray();
+                UpdateDataInspector();
+            }
+        }
+
+        private void UpdateDataInspector()
+        {
+            if (_selectedBytes == null || _selectedBytes.Length == 0)
+            {
+                labelSelectedAddress.Text = "Address: (select bytes)";
+                labelInt8.Text = "Int8:  -";
+                labelInt16.Text = "Int16: -";
+                labelInt32.Text = "Int32: -";
+                labelInt64.Text = "Int64: -";
+                labelFloat.Text = "Float: -";
+                labelDouble.Text = "Double: -";
+                labelString.Text = "String: -";
+                return;
+            }
+
+            labelSelectedAddress.Text = $"Address: 0x{_selectedAddress:X8} ({_selectedBytes.Length} bytes)";
+
+            // Int8
+            if (_selectedBytes.Length >= 1)
+            {
+                sbyte int8 = (sbyte)_selectedBytes[0];
+                byte uint8 = _selectedBytes[0];
+                labelInt8.Text = $"Int8:  {int8} (U: {uint8})";
+            }
+
+            // Int16
+            if (_selectedBytes.Length >= 2)
+            {
+                short int16 = BitConverter.ToInt16(_selectedBytes, 0);
+                ushort uint16 = BitConverter.ToUInt16(_selectedBytes, 0);
+                labelInt16.Text = $"Int16: {int16} (U: {uint16})";
+            }
+            else
+            {
+                labelInt16.Text = "Int16: Need 2 bytes";
+            }
+
+            // Int32
+            if (_selectedBytes.Length >= 4)
+            {
+                int int32 = BitConverter.ToInt32(_selectedBytes, 0);
+                uint uint32 = BitConverter.ToUInt32(_selectedBytes, 0);
+                labelInt32.Text = $"Int32: {int32} (U: {uint32})";
+            }
+            else
+            {
+                labelInt32.Text = "Int32: Need 4 bytes";
+            }
+
+            // Int64
+            if (_selectedBytes.Length >= 8)
+            {
+                long int64 = BitConverter.ToInt64(_selectedBytes, 0);
+                ulong uint64 = BitConverter.ToUInt64(_selectedBytes, 0);
+                labelInt64.Text = $"Int64: {int64}";
+            }
+            else
+            {
+                labelInt64.Text = "Int64: Need 8 bytes";
+            }
+
+            // Float
+            if (_selectedBytes.Length >= 4)
+            {
+                float floatVal = BitConverter.ToSingle(_selectedBytes, 0);
+                labelFloat.Text = $"Float: {floatVal:F6}";
+            }
+            else
+            {
+                labelFloat.Text = "Float: Need 4 bytes";
+            }
+
+            // Double
+            if (_selectedBytes.Length >= 8)
+            {
+                double doubleVal = BitConverter.ToDouble(_selectedBytes, 0);
+                labelDouble.Text = $"Double: {doubleVal:F6}";
+            }
+            else
+            {
+                labelDouble.Text = "Double: Need 8 bytes";
+            }
+
+            // String (ASCII)
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in _selectedBytes)
+            {
+                if (b >= 32 && b < 127)
+                    sb.Append((char)b);
+                else
+                    sb.Append('.');
+            }
+            labelString.Text = $"String: {sb.ToString()}";
+        }
+
+        private void buttonWriteValue_Click(object sender, EventArgs e)
+        {
+            if (_selectedAddress < 0)
+            {
+                MessageBox.Show("Please select bytes in the memory viewer first!", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string valueText = textBoxWriteValue.Text.Trim();
+            if (string.IsNullOrEmpty(valueText))
+            {
+                MessageBox.Show("Please enter a value to write!", "No Value", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string dataType = comboBoxDataType.SelectedItem?.ToString() ?? "Int32";
+            byte[] bytesToWrite = null;
+
+            try
+            {
+                switch (dataType)
+                {
+                    case "Int8":
+                        if (sbyte.TryParse(valueText, out sbyte int8))
+                            bytesToWrite = new byte[] { (byte)int8 };
+                        break;
+                    case "Int16":
+                        if (short.TryParse(valueText, out short int16))
+                            bytesToWrite = BitConverter.GetBytes(int16);
+                        break;
+                    case "Int32":
+                        if (int.TryParse(valueText, out int int32))
+                            bytesToWrite = BitConverter.GetBytes(int32);
+                        break;
+                    case "Int64":
+                        if (long.TryParse(valueText, out long int64))
+                            bytesToWrite = BitConverter.GetBytes(int64);
+                        break;
+                    case "Float":
+                        if (float.TryParse(valueText, out float floatVal))
+                            bytesToWrite = BitConverter.GetBytes(floatVal);
+                        break;
+                    case "Double":
+                        if (double.TryParse(valueText, out double doubleVal))
+                            bytesToWrite = BitConverter.GetBytes(doubleVal);
+                        break;
+                }
+
+                if (bytesToWrite == null)
+                {
+                    MessageBox.Show($"Invalid value for {dataType}!", "Invalid Value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Write to memory
+                IntPtr writeAddress = IntPtr.Add(_baseAddress, (int)_selectedAddress);
+                if (Common.Operations.MemoryOperations.WriteMemory(_processHandle, writeAddress, bytesToWrite, out int bytesWritten))
+                {
+                    MessageBox.Show($"Successfully wrote {bytesWritten} bytes to 0x{_selectedAddress:X8}!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Refresh the memory view to show the changes
+                    RefreshMemoryView();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to write to memory!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

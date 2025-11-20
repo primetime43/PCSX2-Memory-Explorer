@@ -52,63 +52,6 @@ namespace PCSX2_Memory_Explorer
             }
         }
 
-        private void buttonRead_Click(object sender, EventArgs e)
-        {
-            if (!ValidateAndGetAddress(out int offset))
-            {
-                return;
-            }
-
-            IntPtr addressToRead = SharedResources.BaseAddressManager.EEmemBaseAddress + offset;
-            byte[] buffer = new byte[4];
-
-            bool success = MemoryOperations.ReadMemory(SharedResources.ProcessHandle, addressToRead, buffer, out int bytesRead);
-
-            if (success && bytesRead == buffer.Length)
-            {
-                int value = BitConverter.ToInt32(buffer, 0);
-                textBoxReadValue.Text = value.ToString();
-                labelStatus.Text = "Memory read successful!";
-                labelStatus.ForeColor = Color.Green;
-            }
-            else
-            {
-                labelStatus.Text = "Memory read failed!";
-                labelStatus.ForeColor = Color.Red;
-            }
-        }
-
-        private void buttonWrite_Click(object sender, EventArgs e)
-        {
-            if (!ValidateAndGetAddress(out int offset))
-            {
-                return;
-            }
-
-            if (int.TryParse(textBoxWriteValue.Text, out int value))
-            {
-                IntPtr addressToWrite = SharedResources.BaseAddressManager.EEmemBaseAddress + offset;
-                byte[] buffer = BitConverter.GetBytes(value);
-
-                bool success = MemoryOperations.WriteMemory(SharedResources.ProcessHandle, addressToWrite, buffer, out int bytesWritten);
-
-                if (success && bytesWritten == buffer.Length)
-                {
-                    labelStatus.Text = "Memory write successful!";
-                    labelStatus.ForeColor = Color.Green;
-                }
-                else
-                {
-                    labelStatus.Text = "Memory write failed!";
-                    labelStatus.ForeColor = Color.Red;
-                }
-            }
-            else
-            {
-                labelStatus.Text = "Invalid input!";
-            }
-        }
-
         private void buttonViewMemory_Click(object sender, EventArgs e)
         {
             // Check if connected to PCSX2
@@ -176,7 +119,7 @@ namespace PCSX2_Memory_Explorer
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selectedText = comboBox1.SelectedItem.ToString();
+            string selectedText = comboBox1?.SelectedItem?.ToString();
 
             try
             {
