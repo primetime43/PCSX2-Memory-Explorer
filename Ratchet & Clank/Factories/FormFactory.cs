@@ -31,6 +31,8 @@ namespace Ratchet___Clank
                     return new GameMemoryEditorForm(new SecretAgentClankConfig());
                 case "Need for Speed: Underground (PS2)":
                     return new GameMemoryEditorForm(new NFSUndergroundConfig());
+                case "Need for Speed: Underground 2 (PS2)":
+                    return new GameMemoryEditorForm(new NFSUnderground2Config());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }

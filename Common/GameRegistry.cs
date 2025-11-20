@@ -21,7 +21,8 @@ namespace Common
             "Ratchet: Deadlocked (NTSC)",
             "Ratchet & Clank: Size Matters (NTSC)",
             "Secret Agent Clank (PAL)",
-            "Need for Speed: Underground (PS2)"
+            "Need for Speed: Underground (PS2)",
+            "Need for Speed: Underground 2 (PS2)"
         };
     }
 }
