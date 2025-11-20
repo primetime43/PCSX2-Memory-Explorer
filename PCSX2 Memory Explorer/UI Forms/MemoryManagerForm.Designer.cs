@@ -140,10 +140,8 @@ namespace PCSX2_Memory_Explorer
             this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox1.Font = new Font("Segoe UI", 9F);
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-                "Ratchet & Clank",
-                "Ratchet & Clank: Going Commando"
-            });
+            // Populate from GameRegistry - add/remove games in Common.GameRegistry.SupportedGames
+            this.comboBox1.Items.AddRange(Common.GameRegistry.SupportedGames.ToArray());
             this.comboBox1.Location = new Point(15, 30);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new Size(245, 23);
