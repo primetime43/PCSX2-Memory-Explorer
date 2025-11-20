@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Common;
+using Ratchet___Clank.Config;
 
 namespace Ratchet___Clank
 {
@@ -11,9 +12,9 @@ namespace Ratchet___Clank
             switch (formName)
             {
                 case "Ratchet & Clank":
-                    return new RatchetAndClankOne();
+                    return new GameMemoryEditorForm(new RatchetClank1Config());
                 case "Ratchet & Clank: Going Commando":
-                    return new RatchetAndClankTwo();
+                    return new GameMemoryEditorForm(new RatchetClank2Config());
                 default:
                     throw new ArgumentException("Form not recognized", nameof(formName));
             }
