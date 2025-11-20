@@ -19,7 +19,8 @@ namespace Common
             "Ratchet & Clank: Going Commando (NTSC)",
             "Ratchet & Clank 3: Up Your Arsenal (NTSC)",
             "Ratchet: Deadlocked (NTSC)",
-            "Ratchet & Clank: Size Matters (NTSC)"
+            "Ratchet & Clank: Size Matters (NTSC)",
+            "Secret Agent Clank (PAL)"
         };
     }
 }
