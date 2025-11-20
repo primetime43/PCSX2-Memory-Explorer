@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Common;
-using Ratchet___Clank;
 
 namespace PCSX2_Memory_Explorer
 {
@@ -13,7 +12,7 @@ namespace PCSX2_Memory_Explorer
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Instantiate the factory from the Ratchet ___ Clank project
+            // Instantiate the FormFactory
             IFormFactory formFactory = new FormFactory();
             Application.Run(new MemoryManager(formFactory));
         }

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using Common;
 using Ratchet___Clank.Config;
 using Need_for_Speed.Config;
 
-namespace Ratchet___Clank
+namespace PCSX2_Memory_Explorer
 {
     /// <summary>
     /// Factory for creating game-specific memory editor forms.

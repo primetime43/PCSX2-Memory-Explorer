@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Ratchet &amp; Clank\Ratchet &amp; Clank.csproj" />
+    <ProjectReference Include="..\Need for Speed\Need for Speed.csproj" />
   </ItemGroup>
 
   <ItemGroup>
