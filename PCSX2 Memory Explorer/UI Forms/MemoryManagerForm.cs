@@ -1,6 +1,5 @@
 ﻿using Common;
 using Common.Operations;
-using System.Diagnostics;
 
 namespace PCSX2_Memory_Explorer
 {
@@ -16,26 +15,31 @@ namespace PCSX2_Memory_Explorer
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            // Run the external executable to update the base_addresses.txt file
-            bool updated = UpdateBaseAddresses();
-            if (!updated)
+            // Try to connect to PCSX2 process (try multiple common process names)
+            string[] possibleNames = { "pcsx2-qt", "pcsx2-qtx64-avx2", "pcsx2x64", "pcsx2" };
+            string connectedProcessName = null;
+
+            foreach (string processName in possibleNames)
             {
-                labelStatus.Text = "Failed to update base addresses!";
-                labelStatus.ForeColor = Color.Red;
-                return;
+                SharedResources.ProcessHandle = MemoryOperations.OpenPCSX2Process(processName, suppressErrors: true);
+                if (SharedResources.ProcessHandle != IntPtr.Zero)
+                {
+                    connectedProcessName = processName;
+                    break;
+                }
             }
 
-            SharedResources.ProcessHandle = MemoryOperations.OpenPCSX2Process("pcsx2-qtx64-avx2");
             if (SharedResources.ProcessHandle == IntPtr.Zero)
             {
-                labelStatus.Text = "Failed to connect to PCSX2!";
+                labelStatus.Text = "PCSX2 not found! Make sure it's running.";
                 labelStatus.ForeColor = Color.Red;
                 return;
             }
 
-            if (SharedResources.BaseAddressManager.ReadBaseAddressesFromFile("base_addresses.txt"))
+            // Read base addresses directly from PCSX2's exported symbols
+            if (SharedResources.BaseAddressManager.ReadBaseAddressesFromProcess(SharedResources.ProcessHandle, connectedProcessName))
             {
-                labelStatus.Text = "Connected to PCSX2 and loaded addresses!";
+                labelStatus.Text = $"Connected to {connectedProcessName}!";
                 labelStatus.ForeColor = Color.Green;
                 labelEEmem.Text = $"EEmem: {SharedResources.BaseAddressManager.EEmemBaseAddress.ToString("X")}";
                 labelIOPmem.Text = $"IOPmem: {SharedResources.BaseAddressManager.IOPmemBaseAddress.ToString("X")}";
@@ -107,18 +111,32 @@ namespace PCSX2_Memory_Explorer
 
         private void buttonViewMemory_Click(object sender, EventArgs e)
         {
-            if (!ValidateAndGetAddress(out int offset))
+            // Check if connected to PCSX2
+            if (SharedResources.ProcessHandle == IntPtr.Zero || SharedResources.BaseAddressManager.EEmemBaseAddress == IntPtr.Zero)
             {
+                labelStatus.Text = "Not connected to PCSX2!";
+                labelStatus.ForeColor = Color.Red;
                 return;
             }
 
-            IntPtr addressToView = SharedResources.BaseAddressManager.EEmemBaseAddress + offset;
+            // Try to get address from textbox if provided, otherwise start at 0x0
+            IntPtr startAddress = IntPtr.Zero;
+            if (ValidateAndGetAddress(out int offset, showEmptyError: false))
+            {
+                startAddress = new IntPtr(offset);
+            }
+
             MemoryViewerForm memoryViewerForm = new MemoryViewerForm();
-            memoryViewerForm.LoadMemory(SharedResources.ProcessHandle, SharedResources.BaseAddressManager.EEmemBaseAddress, addressToView, 0x100);
+            memoryViewerForm.LoadMemory(SharedResources.ProcessHandle, SharedResources.BaseAddressManager.EEmemBaseAddress, startAddress);
             memoryViewerForm.Show();
         }
 
         private bool ValidateAndGetAddress(out int offset)
+        {
+            return ValidateAndGetAddress(out offset, showEmptyError: true);
+        }
+
+        private bool ValidateAndGetAddress(out int offset, bool showEmptyError)
         {
             offset = 0;
 
@@ -133,8 +151,11 @@ namespace PCSX2_Memory_Explorer
 
             if (string.IsNullOrEmpty(addressText))
             {
-                labelStatus.Text = "Memory address is empty!";
-                labelStatus.ForeColor = Color.Red;
+                if (showEmptyError)
+                {
+                    labelStatus.Text = "Memory address is empty!";
+                    labelStatus.ForeColor = Color.Red;
+                }
                 return false;
             }
 
@@ -168,36 +189,5 @@ namespace PCSX2_Memory_Explorer
             }
         }
 
-        private bool UpdateBaseAddresses()
-        {
-            // Define the path to the external executable
-            string exePath = "pcsx2_offsetreader_external.exe";
-            try
-            {
-                // Set up the process start information
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = exePath,
-                    WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory, // Ensure it runs in the same directory as the executable
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
-
-                // Start the process
-                using (Process process = Process.Start(startInfo))
-                {
-                    // Wait for the process to exit and check the exit code
-                    process.WaitForExit();
-                    return process.ExitCode == 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error running {exePath}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
     }
 }

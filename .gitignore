@@ -5,3 +5,6 @@
 */**/obj/Release
 .vs/
 */**/obj/
+CLAUDE.md
+
+.claude/

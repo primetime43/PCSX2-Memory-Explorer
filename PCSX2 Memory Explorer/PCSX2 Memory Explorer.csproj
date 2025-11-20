@@ -26,11 +26,5 @@
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="pcsx2_offsetreader_external.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   
 </Project>

@@ -28,12 +28,15 @@ namespace Common.Operations
         const int PROCESS_VM_OPERATION = 0x0008;
         const int PROCESS_ALL_ACCESS = 0x001F0FFF;
 
-        public static IntPtr OpenPCSX2Process(string processName)
+        public static IntPtr OpenPCSX2Process(string processName, bool suppressErrors = false)
         {
             Process[] processes = Process.GetProcessesByName(processName);
             if (processes.Length == 0)
             {
-                MessageBox.Show($"{processName} process not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!suppressErrors)
+                {
+                    MessageBox.Show($"{processName} process not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return IntPtr.Zero;
             }
 
@@ -41,7 +44,10 @@ namespace Common.Operations
             IntPtr processHandle = OpenProcess(PROCESS_ALL_ACCESS, false, process.Id);
             if (processHandle == IntPtr.Zero)
             {
-                MessageBox.Show($"Failed to open process! Error: {Marshal.GetLastWin32Error()}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!suppressErrors)
+                {
+                    MessageBox.Show($"Failed to open process! Error: {Marshal.GetLastWin32Error()}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return IntPtr.Zero;
             }
 
