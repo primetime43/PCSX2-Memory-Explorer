@@ -24,6 +24,8 @@ namespace Ratchet___Clank
                     return new GameMemoryEditorForm(new RatchetClank3Config());
                 case "Ratchet: Deadlocked (NTSC)":
                     return new GameMemoryEditorForm(new RatchetDeadlockedConfig());
+                case "Ratchet & Clank: Size Matters (NTSC)":
+                    return new GameMemoryEditorForm(new RatchetSizeMattersConfig());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }
