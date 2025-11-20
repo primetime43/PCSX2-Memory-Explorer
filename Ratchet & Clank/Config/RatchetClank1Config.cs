@@ -5,7 +5,7 @@ namespace Ratchet___Clank.Config
 {
     public class RatchetClank1Config : IGameMemoryConfig
     {
-        public string GameName => "Ratchet & Clank 1";
+        public string GameName => "Ratchet & Clank 1 (NTSC)";
 
         public List<MemoryValue> GetMemoryValues()
         {

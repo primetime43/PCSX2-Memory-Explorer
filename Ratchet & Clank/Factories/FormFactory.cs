@@ -12,8 +12,10 @@ namespace Ratchet___Clank
             switch (formName)
             {
                 case "Ratchet & Clank":
+                case "Ratchet & Clank 1 (NTSC)":
                     return new GameMemoryEditorForm(new RatchetClank1Config());
                 case "Ratchet & Clank: Going Commando":
+                case "Ratchet & Clank: Going Commando (NTSC)":
                     return new GameMemoryEditorForm(new RatchetClank2Config());
                 default:
                     throw new ArgumentException("Form not recognized", nameof(formName));
