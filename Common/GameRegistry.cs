@@ -24,7 +24,8 @@ namespace Common
             "Need for Speed: Underground (PS2)",
             "Need for Speed: Underground 2 (PS2)",
             "Need for Speed: Most Wanted - Black Edition (PS2)",
-            "Need for Speed: Hot Pursuit 2 (PS2)"
+            "Need for Speed: Hot Pursuit 2 (PS2)",
+            "Need for Speed: Carbon - Collectors Edition (PS2)"
         };
     }
 }

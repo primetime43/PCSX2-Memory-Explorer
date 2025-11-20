@@ -37,6 +37,8 @@ namespace PCSX2_Memory_Explorer
                     return new GameMemoryEditorForm(new NFSMostWantedConfig());
                 case "Need for Speed: Hot Pursuit 2 (PS2)":
                     return new GameMemoryEditorForm(new NFSHotPursuit2Config());
+                case "Need for Speed: Carbon - Collectors Edition (PS2)":
+                    return new GameMemoryEditorForm(new NFSCarbonConfig());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }
