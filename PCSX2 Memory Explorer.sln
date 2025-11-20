@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34928.147
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11218.70 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ratchet & Clank", "Ratchet & Clank\Ratchet & Clank.csproj", "{CB63C1AE-3853-4603-B68C-1612698BF2E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{07D4169E-84F1-41EB-A24D-62021F832A1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCSX2 Memory Explorer", "PCSX2 Memory Explorer\PCSX2 Memory Explorer.csproj", "{560CA91D-89AB-459D-BC93-970838C1E872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Need for Speed", "Need for Speed\Need for Speed.csproj", "{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{560CA91D-89AB-459D-BC93-970838C1E872}.Release|x64.Build.0 = Release|Any CPU
 		{560CA91D-89AB-459D-BC93-970838C1E872}.Release|x86.ActiveCfg = Release|Any CPU
 		{560CA91D-89AB-459D-BC93-970838C1E872}.Release|x86.Build.0 = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|x64.Build.0 = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Debug|x86.Build.0 = Debug|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|x64.ActiveCfg = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|x64.Build.0 = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|x86.ActiveCfg = Release|Any CPU
+		{8A1B2C3D-4E5F-6A7B-8C9D-0E1F2A3B4C5D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

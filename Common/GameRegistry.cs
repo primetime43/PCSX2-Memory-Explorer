@@ -20,7 +20,8 @@ namespace Common
             "Ratchet & Clank 3: Up Your Arsenal (NTSC)",
             "Ratchet: Deadlocked (NTSC)",
             "Ratchet & Clank: Size Matters (NTSC)",
-            "Secret Agent Clank (PAL)"
+            "Secret Agent Clank (PAL)",
+            "Need for Speed: Underground (PS2)"
         };
     }
 }

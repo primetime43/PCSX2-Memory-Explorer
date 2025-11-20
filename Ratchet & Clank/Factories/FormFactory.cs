@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Common;
 using Ratchet___Clank.Config;
+using Need_for_Speed.Config;
 
 namespace Ratchet___Clank
 {
@@ -28,6 +29,8 @@ namespace Ratchet___Clank
                     return new GameMemoryEditorForm(new RatchetSizeMattersConfig());
                 case "Secret Agent Clank (PAL)":
                     return new GameMemoryEditorForm(new SecretAgentClankConfig());
+                case "Need for Speed: Underground (PS2)":
+                    return new GameMemoryEditorForm(new NFSUndergroundConfig());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }
