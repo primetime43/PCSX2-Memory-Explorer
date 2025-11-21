@@ -13,7 +13,25 @@ namespace Games.MedalOfHonor
 
             // Player Stats
             memoryValues.Add(new MemoryValue("Current Health", 0x002417D8, "Int32", "Player", "0=Dead, 100=Max"));
-            memoryValues.Add(new MemoryValue("Equipped Weapon", 0x002417DC, "Int32", "Player", "Weapon ID"));
+            memoryValues.Add(new MemoryValue("Equipped Weapon", 0x002417DC, "Int32", "Player", "Weapon ID",
+@"0x00=Nothing
+0x06=Colt .45
+0x07=Walther P38
+0x08=Silenced Pistol
+0x0E=M1 Garand
+0x0F=Springfield '03
+0x10=Gewehr 43
+0x14=Thompson
+0x15=MP-40
+0x18=STG-44
+0x19=B.A.R.
+0x1D=Shotgun
+0x1E=Bazooka
+0x20=Panzerschreck
+0x21=Mark II Grenade
+0x22=Stielgranate
+0x25=I.D. Papers
+0xFFFFFFFF=Nothing/Bare Hands"));
             memoryValues.Add(new MemoryValue("Accuracy", 0x00100174, "Float", "Player", "Current accuracy"));
 
             // Game State
@@ -23,12 +41,29 @@ namespace Games.MedalOfHonor
             memoryValues.Add(new MemoryValue("Current Menu", 0x0059E624, "Int32", "Game State", "Menu ID when not in game"));
 
             // Settings
-            memoryValues.Add(new MemoryValue("Controller Config", 0x0023FA38, "Int8", "Settings", "1=Sharpshooter, 2=Classic"));
-            memoryValues.Add(new MemoryValue("Difficulty", 0x0023FA39, "Int8", "Settings", "1=Easy, 2=Normal, 3=Hard"));
+            memoryValues.Add(new MemoryValue("Controller Config", 0x0023FA38, "Int8", "Settings", "1=Sharpshooter, 2=Classic",
+@"0x01=MOH Sharpshooter
+0x02=Classic MOH"));
+            memoryValues.Add(new MemoryValue("Difficulty", 0x0023FA39, "Int8", "Settings", "1=Easy, 2=Normal, 3=Hard",
+@"0x01=Easy
+0x02=Normal
+0x03=Hard"));
 
             // Mission Info
-            memoryValues.Add(new MemoryValue("Mission ID", 0x0023FA3C, "Int32", "Mission", "Current mission (1-6)"));
-            memoryValues.Add(new MemoryValue("Level ID", 0x0023FA40, "Int32", "Mission", "Current level within mission"));
+            memoryValues.Add(new MemoryValue("Mission ID", 0x0023FA3C, "Int32", "Mission", "Current mission (1-6)",
+@"0x01=A Storm in the Port
+0x02=Needle in a Haystack
+0x03=Several Bridges Too Far
+0x04=Rolling Thunder
+0x05=The Horten's Nest
+0x06=D-Day"));
+            memoryValues.Add(new MemoryValue("Level ID", 0x0023FA40, "Int32", "Mission", "Current level within mission",
+@"Mission 1 (D-Day): 1=Your Finest Hour, 2=Into the Breach
+Mission 2 (Storm): 1=Seaside Stowaway, 2=Special Cargo, 3=Eye of Storm, 4=A Chance Meeting
+Mission 3 (Needle): 1=Rough Landing, 2=The Golden Lion, 3=Operation Repunzel
+Mission 4 (Bridges): 1=Nijmegen Bridge, 2=Yard by Yard, 3=Arnhem Knights
+Mission 5 (Thunder): 1=On Track, 2=Riding out Storm, 3=Derailed!
+Mission 6 (Horten's): 1=Clipping Wings, 2=Enemy Mine, 3=Under Radar, 4=Stealing Show"));
             memoryValues.Add(new MemoryValue("Objectives Completed", 0x0023FA46, "Int8", "Mission", "Number completed"));
             memoryValues.Add(new MemoryValue("Level End Flag", 0x0023FA47, "Int8", "Mission", "0=Not finished, 1=Finished"));
             memoryValues.Add(new MemoryValue("Total Objectives", 0x00253D68, "Int32", "Mission", "Total objectives in mission"));

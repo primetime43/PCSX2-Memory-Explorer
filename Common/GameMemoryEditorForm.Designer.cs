@@ -13,6 +13,7 @@ namespace Common
         private System.Windows.Forms.ComboBox comboBoxCategory;
         private System.Windows.Forms.Label labelCategory;
         private System.Windows.Forms.Label labelFreezeCount;
+        private System.Windows.Forms.Label labelTooltipHint;
 
         protected override void Dispose(bool disposing)
         {
@@ -36,6 +37,7 @@ namespace Common
             this.comboBoxCategory = new System.Windows.Forms.ComboBox();
             this.labelCategory = new System.Windows.Forms.Label();
             this.labelFreezeCount = new System.Windows.Forms.Label();
+            this.labelTooltipHint = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemory)).BeginInit();
             this.SuspendLayout();
             //
@@ -137,11 +139,23 @@ namespace Common
             this.labelFreezeCount.TabIndex = 7;
             this.labelFreezeCount.Text = "Frozen: 0 values";
             //
+            // labelTooltipHint
+            //
+            this.labelTooltipHint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTooltipHint.AutoSize = true;
+            this.labelTooltipHint.ForeColor = System.Drawing.Color.Gray;
+            this.labelTooltipHint.Location = new System.Drawing.Point(550, 45);
+            this.labelTooltipHint.Name = "labelTooltipHint";
+            this.labelTooltipHint.Size = new System.Drawing.Size(150, 15);
+            this.labelTooltipHint.TabIndex = 8;
+            this.labelTooltipHint.Text = "Hover over rows for notes";
+            //
             // GameMemoryEditorForm
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 577);
+            this.Controls.Add(this.labelTooltipHint);
             this.Controls.Add(this.labelFreezeCount);
             this.Controls.Add(this.checkBoxAutoRefresh);
             this.Controls.Add(this.buttonWriteAll);

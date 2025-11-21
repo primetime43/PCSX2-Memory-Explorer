@@ -13,14 +13,16 @@ namespace Common
         public int Address { get; set; }
         public string DataType { get; set; } // "Int32", "Float", "Int16", etc.
         public string Description { get; set; }
+        public string Notes { get; set; } // Detailed notes about valid values, etc.
 
-        public MemoryValue(string name, int address, string dataType, string category = "General", string description = "")
+        public MemoryValue(string name, int address, string dataType, string category = "General", string description = "", string notes = "")
         {
             Name = name;
             Address = address;
             DataType = dataType;
             Category = category;
             Description = description;
+            Notes = notes;
         }
     }
 

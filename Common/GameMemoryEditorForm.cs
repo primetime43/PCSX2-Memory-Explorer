@@ -77,6 +77,8 @@ namespace Common
             // Handle checkbox changes
             dataGridViewMemory.CellValueChanged += DataGridViewMemory_CellValueChanged;
             dataGridViewMemory.CurrentCellDirtyStateChanged += DataGridViewMemory_CurrentCellDirtyStateChanged;
+            dataGridViewMemory.CellMouseEnter += DataGridViewMemory_CellMouseEnter;
+            dataGridViewMemory.ShowCellToolTips = true;
 
             // Populate with memory values
             PopulateDataGridView();
@@ -401,6 +403,22 @@ namespace Common
         private void UpdateFreezeCountLabel()
         {
             labelFreezeCount.Text = $"Frozen: {_frozenValues.Count} value{(_frozenValues.Count != 1 ? "s" : "")}";
+        }
+
+        private void DataGridViewMemory_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            DataGridViewRow row = dataGridViewMemory.Rows[e.RowIndex];
+            if (row.Tag is MemoryValue memValue && !string.IsNullOrWhiteSpace(memValue.Notes))
+            {
+                // Set tooltip on the entire row
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cell.ToolTipText = memValue.Notes;
+                }
+            }
         }
     }
 }
