@@ -148,7 +148,7 @@ namespace Common
             this.labelTooltipHint.Name = "labelTooltipHint";
             this.labelTooltipHint.Size = new System.Drawing.Size(150, 15);
             this.labelTooltipHint.TabIndex = 8;
-            this.labelTooltipHint.Text = "Hover over rows for notes";
+            this.labelTooltipHint.Text = "Click 'View' button for detailed notes";
             //
             // GameMemoryEditorForm
             //

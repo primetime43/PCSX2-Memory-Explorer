@@ -57,6 +57,15 @@ namespace Common
             dataGridViewMemory.Columns.Add("DataType", "Data Type");
             dataGridViewMemory.Columns.Add("Description", "Description");
 
+            // Add Notes button column
+            var notesButtonColumn = new DataGridViewButtonColumn();
+            notesButtonColumn.Name = "Notes";
+            notesButtonColumn.HeaderText = "Notes";
+            notesButtonColumn.Text = "View";
+            notesButtonColumn.UseColumnTextForButtonValue = true;
+            notesButtonColumn.Width = 50;
+            dataGridViewMemory.Columns.Add(notesButtonColumn);
+
             // Set column properties - auto-fit content
             dataGridViewMemory.Columns["Freeze"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             dataGridViewMemory.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -74,10 +83,11 @@ namespace Common
             dataGridViewMemory.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewMemory.Columns["Description"].ReadOnly = true;
 
-            // Handle checkbox changes
+            // Handle checkbox changes and button clicks
             dataGridViewMemory.CellValueChanged += DataGridViewMemory_CellValueChanged;
             dataGridViewMemory.CurrentCellDirtyStateChanged += DataGridViewMemory_CurrentCellDirtyStateChanged;
             dataGridViewMemory.CellMouseEnter += DataGridViewMemory_CellMouseEnter;
+            dataGridViewMemory.CellContentClick += DataGridViewMemory_CellContentClick;
             dataGridViewMemory.ShowCellToolTips = true;
 
             // Populate with memory values
@@ -413,12 +423,97 @@ namespace Common
             DataGridViewRow row = dataGridViewMemory.Rows[e.RowIndex];
             if (row.Tag is MemoryValue memValue && !string.IsNullOrWhiteSpace(memValue.Notes))
             {
+                // Show short preview, full notes available via View button
+                string tooltip = memValue.Notes;
+                if (tooltip.Length > 300)
+                {
+                    tooltip = tooltip.Substring(0, 300) + "\n\n... (Click 'View' for full notes)";
+                }
+
                 // Set tooltip on the entire row
                 foreach (DataGridViewCell cell in row.Cells)
                 {
-                    cell.ToolTipText = memValue.Notes;
+                    cell.ToolTipText = tooltip;
                 }
             }
+        }
+
+        private void DataGridViewMemory_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the Notes button was clicked
+            if (e.RowIndex < 0 || dataGridViewMemory.Columns[e.ColumnIndex].Name != "Notes")
+                return;
+
+            var row = dataGridViewMemory.Rows[e.RowIndex];
+            if (row.Tag is not MemoryValue memValue)
+                return;
+
+            if (string.IsNullOrWhiteSpace(memValue.Notes))
+            {
+                MessageBox.Show("No notes available for this memory value.", "Notes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            ShowNotesDialog(memValue.Name, memValue.Notes);
+        }
+
+        private void ShowNotesDialog(string valueName, string notes)
+        {
+            var dialog = new Form
+            {
+                Text = $"Notes - {valueName}",
+                Size = new System.Drawing.Size(600, 500),
+                StartPosition = FormStartPosition.CenterParent,
+                MinimizeBox = false,
+                MaximizeBox = true,
+                ShowInTaskbar = false
+            };
+
+            var textBox = new TextBox
+            {
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Both,
+                Dock = DockStyle.Fill,
+                Font = new System.Drawing.Font("Consolas", 10F),
+                Text = notes,
+                WordWrap = false
+            };
+
+            var buttonPanel = new Panel
+            {
+                Height = 40,
+                Dock = DockStyle.Bottom
+            };
+
+            var copyButton = new Button
+            {
+                Text = "Copy to Clipboard",
+                Width = 120,
+                Height = 30,
+                Location = new System.Drawing.Point(10, 5)
+            };
+            copyButton.Click += (s, e) =>
+            {
+                Clipboard.SetText(notes);
+                MessageBox.Show("Notes copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
+            var closeButton = new Button
+            {
+                Text = "Close",
+                Width = 80,
+                Height = 30,
+                Location = new System.Drawing.Point(140, 5)
+            };
+            closeButton.Click += (s, e) => dialog.Close();
+
+            buttonPanel.Controls.Add(copyButton);
+            buttonPanel.Controls.Add(closeButton);
+            dialog.Controls.Add(textBox);
+            dialog.Controls.Add(buttonPanel);
+
+            dialog.ShowDialog(this);
         }
     }
 }

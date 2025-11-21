@@ -15,8 +15,15 @@ namespace Games.NeedForSpeed
             memoryValues.Add(new MemoryValue("Completion %", 0x004ED560, "Float", "Game State", "Overall completion percentage"));
             memoryValues.Add(new MemoryValue("Current Stage", 0x004FA42C, "Int32", "Game State", "Current stage number"));
             memoryValues.Add(new MemoryValue("Number of Events Completed", 0x004FA430, "Int32", "Game State", "Total events completed (includes cutscenes, shops discovered, etc.)"));
-            memoryValues.Add(new MemoryValue("Career Difficulty", 0x004FB7E4, "Int8", "Game State", "0=Easy, 1=Medium, 2=Hard"));
-            memoryValues.Add(new MemoryValue("Main Menu Selection", 0x0051C408, "Int8", "Game State", "01=Career, 02=Quick Race"));
+            memoryValues.Add(new MemoryValue("Career Difficulty", 0x004FB7E4, "Int8", "Game State", "0=Easy, 1=Medium, 2=Hard",
+@"0 = Easy
+1 = Medium
+2 = Hard"));
+            memoryValues.Add(new MemoryValue("Main Menu Selection", 0x0051C408, "Int8", "Game State", "01=Career, 02=Quick Race",
+@"0x01 = Career
+0x02 = Quick Race
+
+Persists into gameplay"));
 
             // Currency & Messages
             memoryValues.Add(new MemoryValue("Bank", 0x004F9A64, "Int32", "Currency", "Total money"));
@@ -27,7 +34,9 @@ namespace Games.NeedForSpeed
             memoryValues.Add(new MemoryValue("Current Car ID", 0x004EF700, "Int32", "Current Activity", "ID of currently active car"));
             memoryValues.Add(new MemoryValue("Current Neon Underglow", 0x004EFEF8, "Int8", "Current Activity", "Currently applied neon underglow"));
             memoryValues.Add(new MemoryValue("Current Event ID", 0x004FB048, "Int32", "Current Activity", "ID of current event"));
-            memoryValues.Add(new MemoryValue("Current Photography Event Bool", 0x004F6B38, "Int32", "Current Activity", "0x00=not completed, 0x01=completed"));
+            memoryValues.Add(new MemoryValue("Current Photography Event Bool", 0x004F6B38, "Int32", "Current Activity", "0x00=not completed, 0x01=completed",
+@"0x00 = Not Completed
+0x01 = Completed"));
             memoryValues.Add(new MemoryValue("Current Photography Event", 0x004F6B3C, "Int32", "Current Activity", "Current photography event ID"));
             memoryValues.Add(new MemoryValue("Race Car is On Top Of", 0x004FB050, "Int32", "Current Activity", "Race ID that car is positioned on"));
             memoryValues.Add(new MemoryValue("Current Shop ID", 0x004FB058, "Int32", "Current Activity", "ID of shop you are on top of"));
@@ -35,17 +44,62 @@ namespace Games.NeedForSpeed
             memoryValues.Add(new MemoryValue("Current Speed", 0x01CACDA0, "Int32", "Current Activity", "Current speed"));
 
             // Garage & Cars
-            memoryValues.Add(new MemoryValue("Garage Slot Active", 0x004FB080, "Int8", "Garage", "0xa0=Tutorial, 0xa1=Slot 1, 0xa2=Slot 2, 0xa3=Slot 3, 0xa4=Slot 4, 0xa5=Slot 5"));
-            memoryValues.Add(new MemoryValue("Car ID - Garage Slot 1", 0x005012A0, "Int32", "Garage", "Car ID in garage slot 1"));
+            memoryValues.Add(new MemoryValue("Garage Slot Active", 0x004FB080, "Int8", "Garage", "0xa0=Tutorial, 0xa1=Slot 1, 0xa2=Slot 2, 0xa3=Slot 3, 0xa4=Slot 4, 0xa5=Slot 5",
+@"0xA0 = Tutorial
+0xA1 = 1st Slot
+0xA2 = 2nd Slot
+0xA3 = 3rd Slot
+0xA4 = 4th Slot
+0xA5 = 5th Slot"));
+            memoryValues.Add(new MemoryValue("Car ID - Garage Slot 1", 0x005012A0, "Int32", "Garage", "Car ID in garage slot 1",
+@"0x4344B21D = Peugeot 206
+0x432F1BBF = Ford Focus
+0x43101F0A = Toyota Corolla
+0x4343EC2E = Nissan 240SX
+0x4333C927 = Mazda Miata MX-5
+0x433631CF = Honda Civic
+0x43189F5E = Hummer H2
+0x43116E05 = Lincoln Navigator
+0x432E2A28 = Cadillac Escalade
+0x434F8221 = Hyundai Tiburon
+0x434DA951 = Nissan Sentra
+0x43720FB6 = Toyota Celica
+0x43669BC3 = Toyota Supra
+0x43512BB5 = VW Golf GTI
+0x4389FC5F = Audi A3
+0x435E2A7E = Acura RSX
+0x435FC129 = Mitsubishi Eclipse
+0x4384C794 = Audi TT
+0x438D44B7 = Mazda RX-8
+0x439E529A = Nissan 350 Z
+0x438DEB5E = Infiniti G35
+0x43963BE1 = Mitsubishi 3000GT
+0x4397827B = Pontiac GTO
+0x438ECB30 = Ford Mustang GT
+0x4388EA19 = Nissan Skyline GTR
+0x439AB249 = Lancer Evo
+0x43984E5C = Mazda RX-7
+0x43A6D4F8 = Subaru Impreza"));
             memoryValues.Add(new MemoryValue("Car ID - Garage Slot 2", 0x00501A9C, "Int32", "Garage", "Car ID in garage slot 2"));
             memoryValues.Add(new MemoryValue("Car ID - Garage Slot 3", 0x00502298, "Int32", "Garage", "Car ID in garage slot 3"));
             memoryValues.Add(new MemoryValue("Car ID - Garage Slot 4", 0x00502A94, "Int32", "Garage", "Car ID in garage slot 4"));
             memoryValues.Add(new MemoryValue("Car ID - Garage Slot 5", 0x00503290, "Int32", "Garage", "Car ID in garage slot 5"));
 
             // Tutorial
-            memoryValues.Add(new MemoryValue("Tutorial - 1st Race ID", 0x004F9C0C, "Int32", "Tutorial", "1st completed race ID (0xca207583=Hidden Circuit, 0xca207584=Circuit, 0x1bcb7ab0=Sprint)"));
-            memoryValues.Add(new MemoryValue("Tutorial - 2nd Race ID", 0x004F9C10, "Int32", "Tutorial", "2nd completed race ID"));
-            memoryValues.Add(new MemoryValue("Tutorial - 3rd Race ID", 0x004F9C14, "Int32", "Tutorial", "3rd completed race ID"));
+            memoryValues.Add(new MemoryValue("Tutorial - 1st Race ID", 0x004F9C0C, "Int32", "Tutorial", "1st completed race ID",
+@"0xCA207583 = Hidden Circuit
+0xCA207584 = Circuit
+0x1BCB7AB0 = Sprint
+
+Note: This array fills even if races are completed after the tutorial via the world map."));
+            memoryValues.Add(new MemoryValue("Tutorial - 2nd Race ID", 0x004F9C10, "Int32", "Tutorial", "2nd completed race ID",
+@"0xCA207583 = Hidden Circuit
+0xCA207584 = Circuit
+0x1BCB7AB0 = Sprint"));
+            memoryValues.Add(new MemoryValue("Tutorial - 3rd Race ID", 0x004F9C14, "Int32", "Tutorial", "3rd completed race ID",
+@"0xCA207583 = Hidden Circuit
+0xCA207584 = Circuit
+0x1BCB7AB0 = Sprint"));
             memoryValues.Add(new MemoryValue("Tutorial Outruns Won", 0x004F9CE8, "Int32", "Tutorial", "Number of outruns won in tutorial"));
             memoryValues.Add(new MemoryValue("Tutorial Completed", 0x004F9D08, "Int32", "Tutorial", "Bool - Tutorial completed/Stage 1 unlocked"));
 
@@ -95,7 +149,15 @@ namespace Games.NeedForSpeed
             memoryValues.Add(new MemoryValue("Available Races Array", 0x004F9B00, "Int32", "Available Races", "Available races in current stage [160 bytes]"));
 
             // Event System
-            memoryValues.Add(new MemoryValue("Event Array", 0x004FA434, "Int32", "Events", "Event array [2376 bytes] - +0x00=ID, +0x04-0x05=Info, +0x06=Info (16-bit, 0x0005=locations entered)"));
+            memoryValues.Add(new MemoryValue("Event Array", 0x004FA434, "Int32", "Events", "Event array [2376 bytes]",
+@"Event Array Structure (8 bytes each):
++0x00 = ID of event [32-bit]
++0x04 = Info about event [8-bit]
++0x05 = Info about event [8-bit]
++0x06 = Info about event [16-bit]
+
+The 16-bit value at +0x06:
+0x0005 = Location entered (used for Shopper achievements)"));
             memoryValues.Add(new MemoryValue("Event List End", 0x004FAD7C, "Int32", "Events", "End of event list"));
 
             // Profile
