@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Common;
 using Games.RatchetClank;
 using Games.NeedForSpeed;
+using Games.MedalOfHonor;
 
 namespace PCSX2_Memory_Explorer
 {
@@ -39,6 +40,8 @@ namespace PCSX2_Memory_Explorer
                     return new GameMemoryEditorForm(new NFSHotPursuit2Config());
                 case "Need for Speed: Carbon - Collectors Edition (PS2)":
                     return new GameMemoryEditorForm(new NFSCarbonConfig());
+                case "Medal of Honor: Rising Sun (PS2)":
+                    return new GameMemoryEditorForm(new MedalOfHonorRisingSunConfig());
                 default:
                     throw new ArgumentException($"Game '{formName}' not recognized. Available games are defined in Common.GameRegistry.SupportedGames", nameof(formName));
             }
