@@ -40,6 +40,8 @@ namespace PCSX2_Memory_Explorer
                     return new GameMemoryEditorForm(new NFSHotPursuit2Config());
                 case "Need for Speed: Carbon - Collectors Edition (PS2)":
                     return new GameMemoryEditorForm(new NFSCarbonConfig());
+                case "Medal of Honor: Frontline (PS2)":
+                    return new GameMemoryEditorForm(new MedalOfHonorFrontlineConfig());
                 case "Medal of Honor: Rising Sun (PS2)":
                     return new GameMemoryEditorForm(new MedalOfHonorRisingSunConfig());
                 default:

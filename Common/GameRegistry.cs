@@ -15,6 +15,7 @@ namespace Common
         /// </summary>
         public static readonly List<string> SupportedGames = new List<string>
         {
+            "Medal of Honor: Frontline (PS2)",
             "Medal of Honor: Rising Sun (PS2)",
             "Need for Speed: Carbon - Collectors Edition (PS2)",
             "Need for Speed: Hot Pursuit 2 (PS2)",
