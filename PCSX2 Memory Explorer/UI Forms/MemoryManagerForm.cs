@@ -1,4 +1,4 @@
-﻿using Common;
+using Common;
 using Common.Operations;
 
 namespace PCSX2_Memory_Explorer
@@ -15,9 +15,8 @@ namespace PCSX2_Memory_Explorer
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            // Try to connect to PCSX2 process (try multiple common process names)
             string[] possibleNames = { "pcsx2-qt", "pcsx2-qtx64-avx2", "pcsx2x64", "pcsx2" };
-            string connectedProcessName = null;
+            string? connectedProcessName = null;
 
             foreach (string processName in possibleNames)
             {
@@ -36,8 +35,7 @@ namespace PCSX2_Memory_Explorer
                 return;
             }
 
-            // Read base addresses directly from PCSX2's exported symbols
-            if (SharedResources.BaseAddressManager.ReadBaseAddressesFromProcess(SharedResources.ProcessHandle, connectedProcessName))
+            if (SharedResources.BaseAddressManager.ReadBaseAddressesFromProcess(SharedResources.ProcessHandle, connectedProcessName!))
             {
                 labelStatus.Text = $"Connected to {connectedProcessName}!";
                 labelStatus.ForeColor = Color.Green;
@@ -54,7 +52,6 @@ namespace PCSX2_Memory_Explorer
 
         private void buttonViewMemory_Click(object sender, EventArgs e)
         {
-            // Check if connected to PCSX2
             if (SharedResources.ProcessHandle == IntPtr.Zero || SharedResources.BaseAddressManager.EEmemBaseAddress == IntPtr.Zero)
             {
                 labelStatus.Text = "Not connected to PCSX2!";
@@ -62,7 +59,6 @@ namespace PCSX2_Memory_Explorer
                 return;
             }
 
-            // Try to get address from textbox if provided, otherwise start at 0x0
             IntPtr startAddress = IntPtr.Zero;
             if (ValidateAndGetAddress(out int offset, showEmptyError: false))
             {
@@ -74,19 +70,50 @@ namespace PCSX2_Memory_Explorer
             memoryViewerForm.Show();
         }
 
-        private bool ValidateAndGetAddress(out int offset)
+        private void buttonOpenGame_Click(object sender, EventArgs e)
         {
-            return ValidateAndGetAddress(out offset, showEmptyError: true);
+            OpenSelectedGame();
         }
 
-        private bool ValidateAndGetAddress(out int offset, bool showEmptyError)
+        private void listBoxGames_DoubleClick(object sender, EventArgs e)
+        {
+            OpenSelectedGame();
+        }
+
+        private void OpenSelectedGame()
+        {
+            if (listBoxGames.SelectedItem == null)
+            {
+                labelStatus.Text = "Please select a game first";
+                return;
+            }
+
+            string? selectedGame = listBoxGames.SelectedItem.ToString();
+            if (string.IsNullOrEmpty(selectedGame))
+                return;
+
+            try
+            {
+                Form form = formFactory.CreateForm(selectedGame);
+                form.Show();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool ValidateAndGetAddress(out int offset, bool showEmptyError = true)
         {
             offset = 0;
 
             if (SharedResources.BaseAddressManager.EEmemBaseAddress == IntPtr.Zero)
             {
-                labelStatus.Text = "Not connected to process!";
-                labelStatus.ForeColor = Color.Red;
+                if (showEmptyError)
+                {
+                    labelStatus.Text = "Not connected to process!";
+                    labelStatus.ForeColor = Color.Red;
+                }
                 return false;
             }
 
@@ -107,7 +134,7 @@ namespace PCSX2_Memory_Explorer
                 addressText = addressText.Substring(2);
             }
 
-            if (!Int32.TryParse(addressText, System.Globalization.NumberStyles.HexNumber, null, out offset))
+            if (!int.TryParse(addressText, System.Globalization.NumberStyles.HexNumber, null, out offset))
             {
                 labelStatus.Text = "Invalid memory address!";
                 labelStatus.ForeColor = Color.Red;
@@ -116,21 +143,5 @@ namespace PCSX2_Memory_Explorer
 
             return true;
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selectedText = comboBox1?.SelectedItem?.ToString();
-
-            try
-            {
-                Form form = formFactory.CreateForm(selectedText);
-                form.Show();
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
     }
 }
