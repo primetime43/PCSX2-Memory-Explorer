@@ -198,7 +198,11 @@ Note: Useful in Car Shop."));
             // Pointers (Base Addresses - use with offsets)
             memoryValues.Add(new MemoryValue("Post-Pursuit Results Pointer", 0x00531D80, "Int32", "Pointers", "Pointer to post-pursuit results screen"));
             memoryValues.Add(new MemoryValue("Overlay Pointer", 0x005325F0, "Int32", "Pointers", "Pointer to overlay data"));
-            memoryValues.Add(new MemoryValue("Tollbooth ID Pointer", 0x00537C70, "Int32", "Pointers", "Pointer to tollbooth data (+0x1c=Event ID)"));
+            memoryValues.Add(new MemoryValue("Tollbooth ID Pointer", 0x00537C70, "Int32", "Pointers", "Pointer to tollbooth data (+0x1c=Event ID)",
+@"+0x1C | [8-bit] Toolbooth Event ID
+  0x0F = Toolbooth
+
+Note: Pointer value nulls out when not in-game."));
             memoryValues.Add(new MemoryValue("Steering/Gas Pointer", 0x0053FBF8, "Int32", "Pointers", "Pointer (+0x1dc=Steering, +0x1f0=Gas/Reverse)"));
             memoryValues.Add(new MemoryValue("GameSession Pointer", 0x0056F0EC, "Int32", "Pointers", "Pointer to PlayerProfile (+0x1c) with extensive car/career data",
 @"This pointer holds GameSession object.
@@ -238,6 +242,61 @@ PlayerProfile offsets:
   0x0D=Vic, 0x0E=Taz, 0x0F=Sonny
 
 +0xF0 | [32-bit] Money
++0x18A | [8-bit] Unlocked Camden Beach Voice Message
++0x18B | 02=Received Message, 04=Read Message
+
+----- Car Parts Unlocks (Car 1 example, pattern repeats every 0x198 bytes for Cars 2-25) -----
++0x45DC | [8-bit] Car 1 - Current Rims
++0x45F2 | [8-bit] Car 1 - Current Vinyl
++0x4670 | [8-bit] Car 1 - Current Tires
++0x4674 | [8-bit] Car 1 - Current Brakes
++0x4678 | [8-bit] Car 1 - Current Suspension
++0x467C | [8-bit] Car 1 - Current Transmission
++0x4680 | [8-bit] Car 1 - Current Engine
++0x4684 | [8-bit] Car 1 - Current Turbo/Supercharger
++0x4688 | [8-bit] Car 1 - Current Nitrous
++0x468C | [8-bit] Car 1 - Junkman Parts Equipped
+  Bit0=Tires, Bit1=Brakes, Bit2=Suspension, Bit3=Transmission
+  Bit4=Engine, Bit5=Turbo, Bit6=Nitrous
+
+----- Car 4 Extended Data (has extra fields) -----
++0x4A20 | [32-bit] Car 4 ID
+  0x0D590D58=Lexus IS300, 0x0F850F84=Fiat Punto
+  0x24522451=Cobalt SS, 0x03BC03BB=VW Golf GTI
+  0x017F017E=Audi TT 3.2 quattro, 0x00010000=Audi A3 3.2 quattro
+  0x25112510=Mitsubishi Eclipse, 0x00C000BF=Audi A4 3.2 FSI quattro
++0x4A4E | [8-bit] Car 4 - Current Body Kit
++0x4A78 | [8-bit] Car 4 - Current Spoiler
++0x4A9C | [8-bit] Car 4 - Current Roof Scoop
++0x4A9E | [8-bit] Car 4 - Current Hood
++0x4AB8 | [8-bit] Car 4 - Current Paint Color
++0x4ABC | [8-bit] Car 4 - Current Rim Paint Color
++0x4ABE | [8-bit] Car 4 - Current Vinyl Color 1
++0x4AC0 | [8-bit] Car 4 - Current Vinyl Color 2
++0x4AC6 | [8-bit] Car 4 - Current Windshield Decal
++0x4B26 | [8-bit] Car 4 - Current Window Tint
++0x4BB4 | [8-bit] Car 4 State (0x22=Owned, 0xFF=Not Owned)
+
+----- Car 2 Performance Tuning -----
++0x4828 | [Float] Performance Tuning - Steering
++0x482C | [Float] Performance Tuning - Handling
++0x4830 | [Float] Performance Tuning - Brakes
++0x4834 | [Float] Performance Tuning - Ride Height
++0x4838 | [Float] Performance Tuning - Aerodynamics
++0x483C | [Float] Performance Tuning - Nitrous
++0x4840 | [Float] Performance Tuning - Turbo
+
+----- Car Bounty / Impound Strikes (Car 1 example, every 0x38 bytes for Cars 2-25) -----
++0x8B78 | [8-bit] Car 1 - Car Number
++0x8B7A | [8-bit] Car 1 - Extra Impound Strikes (up to 5)
++0x8B7B | [8-bit] Car 1 - Impound Strikes
++0x8B7C | [8-bit] Car 1 - Bit1=Impounded
++0x8B84 | [8-bit] Car 1 - Float Heat Level
++0x8B88 | [32-bit] Car 1 - Bounty
++0x8B90 | [16 Bytes] Car 1 - 16bit Unserved Infractions
++0x8BA0 | [16 Bytes] Car 1 - 16bit Served Infractions
++0x90F0 | [32-bit] Sold Cars - Bounty
++0x90F8 | [32 Bytes] Sold Cars - 16bit Infractions
 
 ----- Rap Sheet (Lifetime) -----
 +0x9C60 | [32-bit] Pursuit Length in Milliseconds
@@ -249,7 +308,16 @@ PlayerProfile offsets:
 +0x9C78 | [32-bit] Helicopters Deployed
 +0x9C7C | [32-bit] Cost to State
 
-See full code notes for Car Parts, Bounty/Impound data, and Race completion flags."));
+----- Quick Race Settings -----
++0x24 | Quick Race - Game type
+  0x00=Sprint, 0x01=Circuit, 0x02=Drag
+  0x03=Lap Knockout, 0x04=Tollbooth, 0x05=Speedtrap
+Sprint: +0x24=Track ID, +0x34=Opponents, +0x35=Difficulty, +0x37=Traffic, +0x38=Catch Up
+Circuit: +0x4C=Track ID, +0x58=Opponents, +0x59=Difficulty, +0x5B=Traffic, +0x5C=Catch Up
+Drag: +0x70=Track ID
+Lap Knockout: +0x94=Track ID
+Tollbooth: +0xB8=Track ID
+Speedtrap: +0xB8=Track ID"));
             memoryValues.Add(new MemoryValue("Reward Marker Pointer", 0x0056F81C, "Int32", "Pointers", "Pointer to reward markers (6 sets of ID+Selected)",
 @"+0x78 | [8-bit] Reward Marker 1 ID
   0x11 = Get out of jail for free
@@ -282,7 +350,40 @@ Blacklist Progress Offsets:
 #4 JV: +0x88 Milestones, +0x8A Race Wins
 #3 Ronnie: +0x14C Milestones, +0x14E Race Wins
 #2 Bull: +0x130 Milestones, +0x132 Race Wins
-#1 Razor: +0xF8 Milestones, +0xFA Race Wins"));
+#1 Razor: +0xF8 Milestones, +0xFA Race Wins
+
++0x3C | Pointer to Race Flags & Best Time/Best Total Speed (in KM/H)
+Race entries: [Bit0]=Completed Flag, +0x04=[Float] Best Time/Speed
+
+----- Tutorial/Prologue (Bit1 Events) -----
++0xF34 [Bit1] Tutorial - Race 1
++0xF44 [Bit1] Prologue (vs. Razor 2)
++0xF54 [Bit1] Prologue (vs. Razor 1)
++0xF64 [Bit1] Prologue (vs. Ronnie)
++0xF74 [Bit1] Prologue (vs. Bull)
++0xF84 [Bit1] Prologue (vs. Rog)
+
+----- Challenge Series (68 total) -----
++0x2E4 CS1, +0x544 CS2, +0xB24 CS3, +0xB74 CS4
++0xC94 CS5, +0xBA4 CS6, +0xDC4 CS7, +0xE24 CS8
++0xC34 CS9, +0xD04 CS10, +0xB84 CS11, +0xC44 CS12
++0xCF4 CS13, +0xE94 CS14, +0xF14 CS15, +0xDE4 CS16
++0xC84 CS17, +0xE64 CS18, +0xD74 CS19, +0xD94 CS20
++0xD24 CS21, +0xCA4 CS22, +0xEB4 CS23, +0xD44 CS24
++0xD34 CS25, +0xDB4 CS26, +0xE34 CS27, +0xDA4 CS28
++0xB44 CS29, +0xE04 CS30, +0xBB4 CS31, +0xBF4 CS32
++0xC54 CS33, +0xC24 CS34, +0xE74 CS35, +0xF04 CS36
++0xD64 CS37, +0xEF4 CS38, +0xB54 CS39, +0xB64 CS40
++0xEC4 CS41, +0xED4 CS42, +0xE14 CS43, +0xC04 CS44
++0xCB4 CS45, +0xBC4 CS46, +0xEE4 CS47, +0xE84 CS48
++0xBD4 CS49, +0xB14 CS50, +0xC64 CS51, +0xDD4 CS52
++0xCC4 CS53, +0xEA4 CS54, +0xE44 CS55, +0xD84 CS56
++0xB04 CS57, +0xB34 CS58, +0xD14 CS59, +0xD54 CS60
++0xB94 CS61, +0xCE4 CS62, +0xC74 CS63, +0xE54 CS64
++0xBE4 CS65, +0xCD4 CS66, +0xDF4 CS67, +0xC14 CS68
+
+Note: +0xA34 also used by Baron Race 7 - North Bay & Seaside (Speedtrap)
+AND Burger King challenge for some reason."));
             memoryValues.Add(new MemoryValue("Infraction Bitflags Pointer", 0x00570F54, "Int32", "Pointers", "Pointer (+0x00) to infraction bitflags",
 @"+0x00 | [8-bit] Infraction Bitflags
   Bit0 = Speeding
@@ -327,9 +428,54 @@ Blacklist Progress Offsets:
 +0x154 | [Float] Speedtrap Total Speed in MP/H
 +0x1C3C | [Float] Total Time
 +0x1C28 | [8-bit] Race Flag (0=Initial, 1=In a Race)"));
-            memoryValues.Add(new MemoryValue("Performance Upgrade Pointer", 0x00575DFC, "Int32", "Pointers", "Pointer (+0x154, +0x118) to performance upgrade data"));
+            memoryValues.Add(new MemoryValue("Performance Upgrade Pointer", 0x00575DFC, "Int32", "Pointers", "Pointer (+0x154, +0x118) to performance upgrade data",
+@"+0x154 | Pointer to Performance Upgrade Data
+  +0x118 | [32 bytes] Start of Current Car Performance Upgrade Data
+
+Note: Bryan magic pointer chain."));
             memoryValues.Add(new MemoryValue("Heat Level Pointer", 0x005771FC, "Int32", "Pointers", "Pointer (+0x30) to current heat level"));
-            memoryValues.Add(new MemoryValue("Current Car Pointer", 0x005A0488, "Int32", "Pointers", "Pointer (+0x40, +0x00) to current car ID"));
+            memoryValues.Add(new MemoryValue("Current Car Pointer", 0x005A0488, "Int32", "Pointers", "Pointer (+0x40, +0x00) to current car ID",
+@"+0x40 | Pointer Chain to Current Car
+  +0x00 | [8-bit] Current Car
+    0x00 = Porsche 911 Turbo S
+    0x01 = Porsche Carrera GT
+    0x02 = Dodge Viper SRT10
+    0x03 = Police Civic Cruiser
+    0x05 = Mazda RX-8
+    0x06 = Subaru Impreza WRX STi
+    0x07 = Mitsubishi Lancer Evolution VIII
+    0x08 = Mustang GT
+    0x09 = Chevrolet Camaro SS
+    0x0B = Pontiac GTO
+    0x0C = Mercedes-Benz SLR McLaren
+    0x0F = Chevrolet Corvette C6
+    0x14 = Audi TT 3.2 quattro
+    0x15 = Audi A3 3.2 quattro
+    0x16 = BMW M3 GTR
+    0x17 = Mercedes-Benz SL 500
+    0x18 = Porsche 911 Carrera S
+    0x28 = Porsche 911 GT2
+    0x29 = BMW M3 GTR GT
+    0x2F = Lexus IS 300
+    0x30 = Vauxhall Monaro VXR
+    0x31 = Mercedes-Benz SL 65 AMG
+    0x32 = Lotus Elise
+    0x34 = Ford GT
+    0x35 = Mitsubishi Eclipse
+    0x36 = Toyota Supra
+    0x37 = Chevrolet Corvette C6.R
+    0x38 = Mazda RX-7
+    0x3B = Lamborghini Murcielago
+    0x3C = Audi A4 3.2 FSI quattro
+    0x3E = Volkswagen Golf GTI
+    0x3F = Porsche Cayman S
+    0x40 = Mercedes-Benz SL 500
+    0x41 = Cadillac CTS
+    0x42 = Aston Martin DB9
+    0x43 = Lamborghini Gallardo
+    0x44 = Chevrolet Cobalt SS
+    0x46 = Renault Clio V6
+    0x4A = Fiat Punto"));
 
             return memoryValues;
         }

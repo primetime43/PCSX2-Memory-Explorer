@@ -36,7 +36,9 @@ Persists into gameplay"));
             memoryValues.Add(new MemoryValue("Current Event ID", 0x004FB048, "Int32", "Current Activity", "ID of current event"));
             memoryValues.Add(new MemoryValue("Current Photography Event Bool", 0x004F6B38, "Int32", "Current Activity", "0x00=not completed, 0x01=completed",
 @"0x00 = Not Completed
-0x01 = Completed"));
+0x01 = Completed
+
+Noted by assumption from existing achievement logic."));
             memoryValues.Add(new MemoryValue("Current Photography Event", 0x004F6B3C, "Int32", "Current Activity", "Current photography event ID"));
             memoryValues.Add(new MemoryValue("Race Car is On Top Of", 0x004FB050, "Int32", "Current Activity", "Race ID that car is positioned on"));
             memoryValues.Add(new MemoryValue("Current Shop ID", 0x004FB058, "Int32", "Current Activity", "ID of shop you are on top of"));
@@ -53,7 +55,7 @@ Persists into gameplay"));
 0xA5 = 5th Slot"));
             memoryValues.Add(new MemoryValue("Car ID - Garage Slot 1", 0x005012A0, "Int32", "Garage", "Car ID in garage slot 1",
 @"0x4344B21D = Peugeot 206
-0x432F1BBF = Ford Focus
+0x432F1BBF = Ford Focus / Lexus IS 300
 0x43101F0A = Toyota Corolla
 0x4343EC2E = Nissan 240SX
 0x4333C927 = Mazda Miata MX-5
@@ -120,7 +122,9 @@ Note: This array fills even if races are completed after the tutorial via the wo
             memoryValues.Add(new MemoryValue("Stage 3 Outruns Won", 0x004F9FF4, "Int32", "Stage 3", "Number of outruns won"));
 
             // Stage 4
-            memoryValues.Add(new MemoryValue("Stage 4 - Completed Races Array", 0x004FA01C, "Int32", "Stage 4", "Race IDs completed [140 bytes, holds 35 entries]"));
+            memoryValues.Add(new MemoryValue("Stage 4 - Completed Races Array", 0x004FA01C, "Int32", "Stage 4", "Race IDs completed [140 bytes, holds 35 entries]",
+@"Array only holds 35 entries.
+Shenanigans to measure Stage 4 and Stage 5."));
             memoryValues.Add(new MemoryValue("Stage 4 - Sponsor Events Array", 0x004FA0A8, "Int32", "Stage 4", "Race ID array start for sponsor events [12 bytes]"));
             memoryValues.Add(new MemoryValue("Stage 4 - URL Events Array", 0x004FA0B8, "Int32", "Stage 4", "Race IDs for URL events [28 bytes]"));
             memoryValues.Add(new MemoryValue("Stage 4 - Magazine Covers Event", 0x004FA0E0, "Int32", "Stage 4", "Event ID for magazine covers"));
@@ -128,7 +132,9 @@ Note: This array fills even if races are completed after the tutorial via the wo
             memoryValues.Add(new MemoryValue("Stage 4 Races Won", 0x004FA100, "Int32", "Stage 4", "Races won while in Stage 4 career overworld"));
 
             // Stage 5
-            memoryValues.Add(new MemoryValue("Stage 5 - Completed Races Array", 0x004FA120, "Int32", "Stage 5", "Race IDs completed [140 bytes, holds 35 entries]"));
+            memoryValues.Add(new MemoryValue("Stage 5 - Completed Races Array", 0x004FA120, "Int32", "Stage 5", "Race IDs completed [140 bytes, holds 35 entries]",
+@"Array only holds 35 entries.
+Shenanigans to measure Stage 4 and Stage 5."));
             memoryValues.Add(new MemoryValue("Stage 5 - 35th World Event", 0x004FA1A8, "Int32", "Stage 5", "35th world event race ID"));
             memoryValues.Add(new MemoryValue("Stage 5 - Sponsor Events Array", 0x004FA1AC, "Int32", "Stage 5", "Race ID array start for sponsor events"));
             memoryValues.Add(new MemoryValue("Stage 5 - 3rd Sponsor Event", 0x004FA1B4, "Int32", "Stage 5", "3rd sponsor event race ID"));
@@ -140,7 +146,8 @@ Note: This array fills even if races are completed after the tutorial via the wo
             memoryValues.Add(new MemoryValue("Races Entered", 0x004FB060, "Int32", "Career Stats", "Total races entered"));
             memoryValues.Add(new MemoryValue("Races Entered (Duplicate)", 0x005060B0, "Int32", "Career Stats", "Total races entered (duplicate address)"));
             memoryValues.Add(new MemoryValue("Races Won", 0x005060B4, "Int32", "Career Stats", "Total races won"));
-            memoryValues.Add(new MemoryValue("Circuits Won", 0x005060E4, "Int32", "Career Stats", "Career circuits won (counts repeats)"));
+            memoryValues.Add(new MemoryValue("Circuits Won", 0x005060E4, "Int32", "Career Stats", "Career circuits won (counts repeats)",
+@"Doesn't reflect the stat on the stats page."));
             memoryValues.Add(new MemoryValue("SUV Races Remaining", 0x004F9C03, "Int8", "Career Stats", "Number of SUV races remaining"));
             memoryValues.Add(new MemoryValue("Highest Drift Score", 0x00511280, "Int32", "Career Stats", "Highest single drift score in most recent drift"));
 
