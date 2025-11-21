@@ -57,18 +57,19 @@ namespace Common
             dataGridViewMemory.Columns.Add("DataType", "Data Type");
             dataGridViewMemory.Columns.Add("Description", "Description");
 
-            // Set column widths and properties
-            dataGridViewMemory.Columns["Name"].Width = 150;
+            // Set column properties - auto-fit content
+            dataGridViewMemory.Columns["Freeze"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridViewMemory.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewMemory.Columns["Name"].ReadOnly = true;
-            dataGridViewMemory.Columns["Category"].Width = 100;
+            dataGridViewMemory.Columns["Category"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewMemory.Columns["Category"].ReadOnly = true;
-            dataGridViewMemory.Columns["Address"].Width = 100;
+            dataGridViewMemory.Columns["Address"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewMemory.Columns["Address"].ReadOnly = true;
-            dataGridViewMemory.Columns["CurrentValue"].Width = 100;
+            dataGridViewMemory.Columns["CurrentValue"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewMemory.Columns["CurrentValue"].ReadOnly = true;
-            dataGridViewMemory.Columns["NewValue"].Width = 100;
+            dataGridViewMemory.Columns["NewValue"].Width = 80;
             dataGridViewMemory.Columns["NewValue"].ReadOnly = false; // Editable
-            dataGridViewMemory.Columns["DataType"].Width = 70;
+            dataGridViewMemory.Columns["DataType"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewMemory.Columns["DataType"].ReadOnly = true;
             dataGridViewMemory.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewMemory.Columns["Description"].ReadOnly = true;
