@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
 using Common;
-using Ratchet___Clank.Config;
-using Need_for_Speed.Config;
+using Games.RatchetClank;
+using Games.NeedForSpeed;
 
 namespace PCSX2_Memory_Explorer
 {
