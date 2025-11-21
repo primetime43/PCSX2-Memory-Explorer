@@ -13,6 +13,7 @@ namespace Common
         private IntPtr _baseAddress;
         private List<MemoryValue> _allMemoryValues;
         private List<MemoryValue> _filteredMemoryValues;
+        private Dictionary<int, string> _frozenValues = new Dictionary<int, string>(); // Address -> Value to freeze
 
         public GameMemoryEditorForm(IGameMemoryConfig gameConfig)
         {
@@ -42,6 +43,12 @@ namespace Common
             dataGridViewMemory.Rows.Clear();
 
             // Define columns
+            var freezeColumn = new DataGridViewCheckBoxColumn();
+            freezeColumn.Name = "Freeze";
+            freezeColumn.HeaderText = "Freeze";
+            freezeColumn.Width = 50;
+            dataGridViewMemory.Columns.Add(freezeColumn);
+
             dataGridViewMemory.Columns.Add("Name", "Name");
             dataGridViewMemory.Columns.Add("Category", "Category");
             dataGridViewMemory.Columns.Add("Address", "Address");
@@ -57,14 +64,18 @@ namespace Common
             dataGridViewMemory.Columns["Category"].ReadOnly = true;
             dataGridViewMemory.Columns["Address"].Width = 100;
             dataGridViewMemory.Columns["Address"].ReadOnly = true;
-            dataGridViewMemory.Columns["CurrentValue"].Width = 120;
+            dataGridViewMemory.Columns["CurrentValue"].Width = 100;
             dataGridViewMemory.Columns["CurrentValue"].ReadOnly = true;
-            dataGridViewMemory.Columns["NewValue"].Width = 120;
+            dataGridViewMemory.Columns["NewValue"].Width = 100;
             dataGridViewMemory.Columns["NewValue"].ReadOnly = false; // Editable
-            dataGridViewMemory.Columns["DataType"].Width = 80;
+            dataGridViewMemory.Columns["DataType"].Width = 70;
             dataGridViewMemory.Columns["DataType"].ReadOnly = true;
             dataGridViewMemory.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewMemory.Columns["Description"].ReadOnly = true;
+
+            // Handle checkbox changes
+            dataGridViewMemory.CellValueChanged += DataGridViewMemory_CellValueChanged;
+            dataGridViewMemory.CurrentCellDirtyStateChanged += DataGridViewMemory_CurrentCellDirtyStateChanged;
 
             // Populate with memory values
             PopulateDataGridView();
@@ -94,6 +105,7 @@ namespace Common
                 int rowIndex = dataGridViewMemory.Rows.Add();
                 DataGridViewRow row = dataGridViewMemory.Rows[rowIndex];
 
+                row.Cells["Freeze"].Value = _frozenValues.ContainsKey(memValue.Address);
                 row.Cells["Name"].Value = memValue.Name;
                 row.Cells["Category"].Value = memValue.Category;
                 row.Cells["Address"].Value = $"0x{memValue.Address:X8}";
@@ -105,6 +117,8 @@ namespace Common
                 // Store the MemoryValue object in the Tag for easy access
                 row.Tag = memValue;
             }
+
+            UpdateFreezeCountLabel();
         }
 
         private void buttonRefreshAll_Click(object sender, EventArgs e)
@@ -297,6 +311,95 @@ namespace Common
         private void timerAutoRefresh_Tick(object sender, EventArgs e)
         {
             RefreshAllValues();
+        }
+
+        private void DataGridViewMemory_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            // Commit checkbox changes immediately
+            if (dataGridViewMemory.IsCurrentCellDirty &&
+                dataGridViewMemory.CurrentCell is DataGridViewCheckBoxCell)
+            {
+                dataGridViewMemory.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void DataGridViewMemory_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+
+            if (dataGridViewMemory.Columns[e.ColumnIndex].Name != "Freeze")
+                return;
+
+            DataGridViewRow row = dataGridViewMemory.Rows[e.RowIndex];
+            if (row.Tag is not MemoryValue memValue)
+                return;
+
+            bool isFrozen = (bool)(row.Cells["Freeze"].Value ?? false);
+
+            if (isFrozen)
+            {
+                // Get the current value to freeze
+                string currentValue = row.Cells["CurrentValue"].Value?.ToString() ?? "";
+                string newValue = row.Cells["NewValue"].Value?.ToString();
+
+                // If NewValue is set, use that; otherwise use CurrentValue
+                string valueToFreeze = !string.IsNullOrWhiteSpace(newValue) ? newValue : currentValue;
+
+                if (valueToFreeze != "-" && valueToFreeze != "Error" && !string.IsNullOrWhiteSpace(valueToFreeze))
+                {
+                    _frozenValues[memValue.Address] = valueToFreeze;
+                }
+                else
+                {
+                    // Need to read the current value first
+                    if (_processHandle != IntPtr.Zero && _baseAddress != IntPtr.Zero)
+                    {
+                        IntPtr address = IntPtr.Add(_baseAddress, memValue.Address);
+                        string readValue = ReadMemoryValue(address, memValue.DataType);
+                        if (readValue != "Error")
+                        {
+                            _frozenValues[memValue.Address] = readValue;
+                            row.Cells["CurrentValue"].Value = readValue;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _frozenValues.Remove(memValue.Address);
+            }
+
+            UpdateFreezeCountLabel();
+        }
+
+        private void timerFreeze_Tick(object sender, EventArgs e)
+        {
+            if (_processHandle == IntPtr.Zero || _baseAddress == IntPtr.Zero)
+                return;
+
+            if (_frozenValues.Count == 0)
+                return;
+
+            // Write all frozen values
+            foreach (var memValue in _allMemoryValues)
+            {
+                if (_frozenValues.TryGetValue(memValue.Address, out string frozenValue))
+                {
+                    IntPtr address = IntPtr.Add(_baseAddress, memValue.Address);
+                    byte[] bytesToWrite = ConvertStringToBytes(frozenValue, memValue.DataType);
+
+                    if (bytesToWrite != null)
+                    {
+                        MemoryOperations.WriteMemory(_processHandle, address, bytesToWrite, out _);
+                    }
+                }
+            }
+        }
+
+        private void UpdateFreezeCountLabel()
+        {
+            labelFreezeCount.Text = $"Frozen: {_frozenValues.Count} value{(_frozenValues.Count != 1 ? "s" : "")}";
         }
     }
 }

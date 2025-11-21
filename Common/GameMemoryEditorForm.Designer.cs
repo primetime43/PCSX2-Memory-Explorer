@@ -8,9 +8,11 @@ namespace Common
         private System.Windows.Forms.Button buttonWriteAll;
         private System.Windows.Forms.CheckBox checkBoxAutoRefresh;
         private System.Windows.Forms.Timer timerAutoRefresh;
+        private System.Windows.Forms.Timer timerFreeze;
         private System.Windows.Forms.Label labelGameName;
         private System.Windows.Forms.ComboBox comboBoxCategory;
         private System.Windows.Forms.Label labelCategory;
+        private System.Windows.Forms.Label labelFreezeCount;
 
         protected override void Dispose(bool disposing)
         {
@@ -29,9 +31,11 @@ namespace Common
             this.buttonWriteAll = new System.Windows.Forms.Button();
             this.checkBoxAutoRefresh = new System.Windows.Forms.CheckBox();
             this.timerAutoRefresh = new System.Windows.Forms.Timer(this.components);
+            this.timerFreeze = new System.Windows.Forms.Timer(this.components);
             this.labelGameName = new System.Windows.Forms.Label();
             this.comboBoxCategory = new System.Windows.Forms.ComboBox();
             this.labelCategory = new System.Windows.Forms.Label();
+            this.labelFreezeCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemory)).BeginInit();
             this.SuspendLayout();
             //
@@ -117,11 +121,28 @@ namespace Common
             this.timerAutoRefresh.Interval = 1000;
             this.timerAutoRefresh.Tick += new System.EventHandler(this.timerAutoRefresh_Tick);
             //
+            // timerFreeze
+            //
+            this.timerFreeze.Interval = 100;
+            this.timerFreeze.Enabled = true;
+            this.timerFreeze.Tick += new System.EventHandler(this.timerFreeze_Tick);
+            //
+            // labelFreezeCount
+            //
+            this.labelFreezeCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelFreezeCount.AutoSize = true;
+            this.labelFreezeCount.Location = new System.Drawing.Point(270, 542);
+            this.labelFreezeCount.Name = "labelFreezeCount";
+            this.labelFreezeCount.Size = new System.Drawing.Size(100, 15);
+            this.labelFreezeCount.TabIndex = 7;
+            this.labelFreezeCount.Text = "Frozen: 0 values";
+            //
             // GameMemoryEditorForm
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 577);
+            this.Controls.Add(this.labelFreezeCount);
             this.Controls.Add(this.checkBoxAutoRefresh);
             this.Controls.Add(this.buttonWriteAll);
             this.Controls.Add(this.buttonRefreshAll);
